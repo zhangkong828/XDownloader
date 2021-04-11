@@ -9,76 +9,79 @@ namespace XDownloader.Infrastructure
 {
     public class ProcessHelper
     {
-        private Process dlProcess;
+        private Process _process;
+        private string _filename;
+        private string _arguments;
+        private Action<string> _action;
 
-        private void PrepareDlProcess()
+        public ProcessHelper(string filename, string arguments, Action<string> outputAction)
         {
-            dlProcess = new Process();
-            dlProcess.StartInfo.FileName = "";
-            dlProcess.StartInfo.CreateNoWindow = true;
-            dlProcess.StartInfo.UseShellExecute = false;
-            dlProcess.StartInfo.RedirectStandardError = true;
-            dlProcess.StartInfo.RedirectStandardOutput = true;
-            dlProcess.StartInfo.StandardErrorEncoding = Encoding.UTF8;
-            dlProcess.StartInfo.StandardOutputEncoding = Encoding.UTF8;
-            dlProcess.EnableRaisingEvents = true;
-            dlProcess.ErrorDataReceived += DlOutputHandler;
-            dlProcess.OutputDataReceived += DlOutputHandler;
-            dlProcess.Exited += DlProcess_Exited;
+            _filename = filename;
+            _arguments = arguments;
+            _action = outputAction;
+
+            Init();
         }
 
-        private void DlProcess_Exited(object sender, EventArgs e)
+        private void Init()
         {
-            dlProcess.CancelErrorRead();
-            dlProcess.CancelOutputRead();
+            _process = new Process();
+            _process.StartInfo.FileName = _filename;
+            _process.StartInfo.CreateNoWindow = true;
+            _process.StartInfo.UseShellExecute = false;
+            _process.StartInfo.RedirectStandardError = true;
+            _process.StartInfo.RedirectStandardOutput = true;
+            _process.StartInfo.StandardErrorEncoding = Encoding.UTF8;
+            _process.StartInfo.StandardOutputEncoding = Encoding.UTF8;
+            _process.EnableRaisingEvents = true;
+            _process.ErrorDataReceived += OutputHandler;
+            _process.OutputDataReceived += OutputHandler;
+            _process.Exited += ExitedHandler;
         }
 
-        private void DlOutputHandler(object sender, DataReceivedEventArgs e)
+        private void ExitedHandler(object sender, EventArgs e)
         {
-            var text = e.Data;
+            _process.CancelErrorRead();
+            _process.CancelOutputRead();
         }
 
-        private void Start()
+        private void OutputHandler(object sender, DataReceivedEventArgs e)
+        {
+            _action?.Invoke(e.Data);
+        }
+
+        public void Start()
         {
             try
             {
-                var sb = new StringBuilder();
-                sb.Append(" --encoding \"UTF-8\" --no-warnings --ignore-errors");
+                _process.StartInfo.Arguments = _arguments;
 
-                dlProcess.StartInfo.Arguments = sb.ToString();
-                
-                dlProcess.Start();
-                dlProcess.BeginErrorReadLine();
-                dlProcess.BeginOutputReadLine();
+                _process.Start();
+                _process.BeginErrorReadLine();
+                _process.BeginOutputReadLine();
             }
             catch (Exception ex)
             {
-                //outputString.Append(ex.Message);
+                _action?.Invoke(ex.Message);
+            }
+        }
+
+        public void Abort()
+        {
+            try
+            {
+                _process.Kill();
+            }
+            catch (Exception ex)
+            {
+                _action?.Invoke(ex.Message);
             }
             finally
             {
-            }
-        }
-
-        private void AbortDl()
-        {
-            var plist = Process.GetProcessesByName("ffmpeg");
-            foreach (var p in plist) p.Kill();
-
-            try
-            {
-                // yes, I know it's bad to just kill the process.
-                // but currently .NET Core doesn't have an API for sending ^C or SIGTERM to a process
-                // see https://github.com/dotnet/runtime/issues/14628
-                // To implement a platform-specific solution,
-                // we need to use Win32 APIs.
-                // see https://stackoverflow.com/questions/283128/how-do-i-send-ctrlc-to-a-process-in-c
-                // I would prefer not to use Win32 APIs in the application.
-                dlProcess.Kill();
-            }
-            catch (Exception ex)
-            {
-                //Output = ex.Message;
+                if (_process != null)
+                {
+                    _process.Dispose();
+                }
             }
         }
     }

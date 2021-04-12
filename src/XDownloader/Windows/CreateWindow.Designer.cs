@@ -45,6 +45,7 @@ namespace XDownloader.Windows
             this.AddLinksTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.AddLinksTextBox.Size = new System.Drawing.Size(605, 132);
             this.AddLinksTextBox.TabIndex = 0;
+            this.AddLinksTextBox.Text = "https://www.bilibili.com/video/BV1PC4y1W7GM";
             // 
             // label1
             // 

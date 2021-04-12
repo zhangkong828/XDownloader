@@ -20,6 +20,7 @@ namespace XDownloader.Windows
         }
 
         public string SelectedPath { get; set; }
+        public string Links { get; set; }
 
         private void FolderBrowserButton_Click(object sender, EventArgs e)
         {
@@ -34,6 +35,12 @@ namespace XDownloader.Windows
 
         private void DownloadButton_Click(object sender, EventArgs e)
         {
+            this.Links = AddLinksTextBox.Text;
+            if (string.IsNullOrWhiteSpace(this.Links))
+            {
+                MessageBox.Show("下载链接不能为空");
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(this.SelectedPath))
             {

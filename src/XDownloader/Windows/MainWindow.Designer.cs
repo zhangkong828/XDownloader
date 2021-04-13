@@ -69,7 +69,7 @@ namespace XDownloader.Windows
             // 
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
             this.createToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.createToolStripMenuItem.Text = "新建";
+            this.createToolStripMenuItem.Text = "下载";
             this.createToolStripMenuItem.Click += new System.EventHandler(this.createToolStripMenuItem_Click);
             // 
             // 关于ToolStripMenuItem

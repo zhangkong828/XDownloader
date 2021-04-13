@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,9 +43,22 @@ namespace XDownloader.Windows
 
         private void Download(string url, string output)
         {
-            var subItems = new string[] { url, "--", "--", "--", "--", "--", "--","准备中" };
+            var subItems = new string[] { url, "--", "--", "--", "--", "--", "--", "解析中" };
             ListViewItem currentItem = new ListViewItem(subItems);
             ListView.Items.Add(currentItem);
+
+            var info = AnnieHelper.QueryInfo(url);
+            if (info == null || string.IsNullOrWhiteSpace(info.Title))
+            {
+                currentItem.SubItems[7].Text = "解析失败";
+                return;
+            }
+
+            if (CheckFileExists(info.Title, output))
+            {
+                currentItem.SubItems[7].Text = "已存在";
+                return;
+            }
 
             Task.Run(() =>
             {
@@ -99,7 +113,7 @@ namespace XDownloader.Windows
                                     time.Text = downloadInfo.Time;
                                     status.Text = "下载中";
 
-                                    if (downloadInfo.Progress=="100.00%")
+                                    if (downloadInfo.Progress == "100.00%")
                                     {
                                         status.Text = "完成";
                                         speed.Text = "";
@@ -119,5 +133,13 @@ namespace XDownloader.Windows
             });
         }
 
+        private bool CheckFileExists(string name, string output)
+        {
+            var directory = new DirectoryInfo(output);
+            if (!directory.Exists) directory.Create();
+
+            var files = directory.GetFiles($"{name}.*");
+            return files.Length > 0;
+        }
     }
 }

@@ -20,19 +20,49 @@ namespace XDownloader.Infrastructure
         private static string RegexString2 = @"(.+?)\s{2,4}(.+?%)\s(.+?/s)";
         private static string RegexString3 = @"(.+?)\s{2,4}(.+?%)\s(.+?/s)\s(.+)";
 
-        public static void Download(string url, string output, Action<string> logAction)
+        public static DownloadInfo QueryInfo(string url)
         {
-            Task.Run(() =>
-            {
-                var sb = new StringBuilder();
-                sb.Append($" -o {output}");
-                //sb.Append($" -i");
-                sb.Append($" {url}");
+            var info = new DownloadInfo();
+            info.Url = url;
 
-                var arguments = sb.ToString();
-                var process = new ProcessHelper(ExePath, arguments, logAction);
-                process.Start();
-            });
+            var sb = new StringBuilder();
+            sb.Append($" -i");
+            sb.Append($" {url}");
+            var arguments = sb.ToString();
+            var process = new ProcessHelper(ExePath, arguments, new Action<string>(log =>
+            {
+                if (!string.IsNullOrWhiteSpace(log))
+                {
+                    var text = log.TrimStart();
+                    if (text.StartsWith("Site"))
+                    {
+                        if (Regex.IsMatch(text, RegexStringSite))
+                        {
+                            var match = Regex.Match(text, RegexStringSite);
+                            info.Site = match.Groups[1].Value.Trim();
+                        }
+                    }
+                    else if (text.StartsWith("Title"))
+                    {
+                        if (Regex.IsMatch(text, RegexStringTitle))
+                        {
+                            var match = Regex.Match(text, RegexStringTitle);
+                            info.Title = match.Groups[1].Value.Trim();
+                        }
+                    }
+                    else if (text.StartsWith("Type"))
+                    {
+                        if (Regex.IsMatch(text, RegexStringType))
+                        {
+                            var match = Regex.Match(text, RegexStringType);
+                            info.Type = match.Groups[1].Value.Trim();
+                        }
+                    }
+                }
+
+            }));
+            process.Start();
+            return info;
         }
 
         public static DownloadInfo ParseOutput(string text)

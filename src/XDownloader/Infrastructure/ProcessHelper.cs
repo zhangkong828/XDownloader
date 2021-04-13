@@ -59,7 +59,7 @@ namespace XDownloader.Infrastructure
                 _process.Start();
                 _process.BeginErrorReadLine();
                 _process.BeginOutputReadLine();
-                //_process.WaitForExit();
+                _process.WaitForExit();
             }
             catch (Exception ex)
             {

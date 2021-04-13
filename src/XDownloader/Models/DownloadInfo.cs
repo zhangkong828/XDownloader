@@ -18,5 +18,8 @@ namespace XDownloader.Models
         public string Progress { get; set; }
         public string Speed { get; set; }
         public string Time { get; set; }
+
+        public bool IsMessage { get { return !string.IsNullOrEmpty(Message); } }
+        public string Message { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using XDownloader.Analyzer.Infrastructure;
 
@@ -37,7 +36,20 @@ namespace XDownloader.Analyzer.Extractors.qq
                 }
                 else if (url.Contains("mp.weixin.qq.com/s"))//微信公众号
                 {
-
+                    //只取第一个
+                    var content = HttpHelper.Get(url);
+                    var vid = Util.Match(content, "\\?vid=(\\w+)");
+                    var detail = GetInfos(vid, out string errorMsg);
+                    if (detail != null)
+                    {
+                        response.Success = true;
+                        response.Data = detail;
+                    }
+                    else
+                    {
+                        response.Success = false;
+                        response.Message = errorMsg;
+                    }
                 }
                 else
                 {
@@ -99,52 +111,13 @@ namespace XDownloader.Analyzer.Extractors.qq
             }
         }
 
-
-        private List<string> GetVid(string url)
-        {
-            var result = new List<string>();
-
-            //http://mp.weixin.qq.com/s/IuJfF7zidy9MU6OsHveu7w
-            if (url.Contains("mp.weixin.qq.com/s"))
-            {
-                var content = HttpHelper.Get(url);
-                var matchs = Regex.Matches(content, "\\?vid=(\\w+)");
-                foreach (Match item in matchs)
-                {
-                    var vid = item.Groups[1].Value;
-                    if (!string.IsNullOrEmpty(vid))
-                        result.Add(vid);
-                }
-            }
-            else if (url.Contains("v.qq.com"))
-            {
-                int tryCount = 2;
-                GetVid:
-                string content = HttpHelper.Get(url);
-                var vid = Regex.Match(content, "&vid=(.+?)&").Groups[1].Value;
-                if (string.IsNullOrEmpty(vid))
-                {
-                    if (tryCount <= 0)
-                    {
-                        return result;
-                    }
-                    tryCount--;
-                    goto GetVid;
-                }
-                result.Add(vid);
-            }
-
-            return result;
-        }
-
-
         private VideoDetail GetInfos(string vid, out string errorMsg)
         {
             errorMsg = string.Empty;
 
             var info_api = $"http://vv.video.qq.com/getinfo?otype=json&appver=3.2.19.333&platform=11&defnpayver=1&vid={vid}";
             var info = HttpHelper.Get(info_api);
-            var infoText = Regex.Match(info, "QZOutputJson=(.*)").Groups[1].Value.TrimEnd(';');
+            var infoText = Util.Match(info, "QZOutputJson=(.*)").TrimEnd(';');
             var infoJson = JsonConvert.DeserializeObject(infoText) as JObject;
 
             if (infoJson["msg"] != null)

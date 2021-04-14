@@ -18,5 +18,10 @@ namespace XDownloader.Analyzer
         {
             return new AnalyzeResponse() { Success = false, Message = string.IsNullOrWhiteSpace(message) ? "解析失败" : message };
         }
+
+        public static AnalyzeResponse NotSupported(string site = null)
+        {
+            return new AnalyzeResponse() { Success = false, Message = $"{site}暂不支持该链接" };
+        }
     }
 }

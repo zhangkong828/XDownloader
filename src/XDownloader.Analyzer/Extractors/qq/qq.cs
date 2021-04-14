@@ -24,15 +24,18 @@ namespace XDownloader.Analyzer.Extractors.qq
             {
                 if (Util.IsMatch(url, "https?://(m\\.)?egame.qq.com/"))//企鹅电竞
                 {
-
+                    //TODO
+                    return AnalyzeResponse.NotSupported();
                 }
                 else if (url.Contains("kg.qq.com") || url.Contains("kg2.qq.com"))//全民K歌
                 {
-
+                    //TODO
+                    return AnalyzeResponse.NotSupported();
                 }
                 else if (url.Contains("live.qq.com"))//企鹅直播
                 {
-
+                    //TODO
+                    return AnalyzeResponse.NotSupported();
                 }
                 else if (url.Contains("mp.weixin.qq.com/s"))//微信公众号
                 {

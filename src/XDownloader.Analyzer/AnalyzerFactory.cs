@@ -36,11 +36,7 @@ namespace XDownloader.Analyzer
             var analyser = Create(url);
             if (analyser == null)
             {
-                return new AnalyzeResponse()
-                {
-                    Success = false,
-                    Message = "没有找到对应的解析器，无法解析"
-                };
+                return AnalyzeResponse.NotSupported();
             }
             return analyser.Analyze(url, null);
 

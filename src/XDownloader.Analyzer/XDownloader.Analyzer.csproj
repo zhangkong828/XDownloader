@@ -50,6 +50,7 @@
     <Compile Include="Extractors\qq\qq.cs" />
     <Compile Include="IAnalyzer.cs" />
     <Compile Include="Infrastructure\HttpHelper.cs" />
+    <Compile Include="Infrastructure\StringExtension.cs" />
     <Compile Include="Models\AnalyzeResponse.cs" />
     <Compile Include="Models\Video.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

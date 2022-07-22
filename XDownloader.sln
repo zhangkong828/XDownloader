@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XDownloader.Analyzer", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XDownloader.Analyzer.Test", "src\XDownloader.Analyzer.Test\XDownloader.Analyzer.Test.csproj", "{B4964BEB-8266-4CAF-B6D6-1E753B254D69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XDownloader.Update", "XDownloader.Update\XDownloader.Update.csproj", "{873D6051-FB15-4F2E-8D96-7E0DF6BD491F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{B4964BEB-8266-4CAF-B6D6-1E753B254D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4964BEB-8266-4CAF-B6D6-1E753B254D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4964BEB-8266-4CAF-B6D6-1E753B254D69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{873D6051-FB15-4F2E-8D96-7E0DF6BD491F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{873D6051-FB15-4F2E-8D96-7E0DF6BD491F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{873D6051-FB15-4F2E-8D96-7E0DF6BD491F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{873D6051-FB15-4F2E-8D96-7E0DF6BD491F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

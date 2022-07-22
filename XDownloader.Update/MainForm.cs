@@ -496,5 +496,123 @@ namespace XDownloader.Update
                 ResetProgressBar();
             }
         }
+
+        /// <summary>
+        /// 下载并更新服务
+        /// </summary>
+        private bool DowLoadAndUpdate(int type, string versionType, string version)
+        {
+            return false;
+            //bool isOver = false;
+            //Task.Run(() =>
+            //{
+            //    while (!isOver)
+            //    {
+            //        if (progressBar.Value < 99)
+            //        {
+            //            AddProgressBar(1);
+            //            Thread.Sleep(1000 * 5);
+            //        }
+            //        else
+            //            break;
+            //    }
+            //});
+
+            //try
+            //{
+            //    //显示更新程序
+            //    Show();
+
+            //    #region 下载文件,一次最多尝试3次
+            //    byte[] resource = null;
+            //    try
+            //    {
+            //        Record("正在尝试下载");
+            //        using (var client = new HttpClient())
+            //        {
+            //            client.Timeout = new TimeSpan(0, 10, 0);
+            //            string urlFilePath = string.Format("{0}{1}/{2}.rar&sharpZipLib=0", updateDownUrl, versionType, versionType);
+
+            //            var fileResponse = client.GetStringAsync(urlFilePath).Result; //是一个压缩文件
+            //            dynamic jsonFileResponse = JsonConvert.DeserializeObject<dynamic>(fileResponse);
+
+            //            if (jsonFileResponse.IsSuccess == true)
+            //            {
+            //                var fileStr = jsonFileResponse.Data.ToString();
+            //                resource = JsonConvert.DeserializeObject<byte[]>(fileStr);
+            //            }
+            //            else
+            //            {
+            //                Record(versionType + ".rar" + " -> " + jsonFileResponse.Data.ToString());
+            //                Log.DebugFormat("下载文件失败:{0}.rar {1}", versionType, jsonFileResponse.Data.ToString());
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Record(versionType + ".rar" + " -> " + ex.Message);
+            //        Log.ErrorFormat("下载文件时发生异常:{0} {1}", versionType, ex.Message);
+            //    }
+            //    #endregion
+
+            //    if (resource != null)
+            //    {
+            //        //关闭服务
+            //        StopService();
+
+            //        string fileDir = string.Format("{0}/upload", Application.StartupPath);
+            //        string filePath = string.Format("{0}/{1}.rar", fileDir, versionType);
+
+            //        Record("正在保存文件");
+            //        FileHelper.SaveFile(filePath, resource);
+            //        Thread.Sleep(1000);
+
+            //        var versionDir = string.Format("{0}/{1}", fileDir, versionType);
+            //        if (Directory.Exists(versionDir))
+            //        {
+            //            Record("删除之前的解压文件");
+            //            Directory.Delete(versionDir, true);
+            //            Thread.Sleep(1000);
+            //        }
+
+            //        //尝试3次
+            //        int trytimes = 3;
+            //        while (trytimes > 0)
+            //        {
+            //            Record("尝试解压文件");
+            //            FileHelper.DeCompressRar(filePath, fileDir);
+            //            Thread.Sleep(1000);
+
+            //            if (Directory.Exists(versionDir))
+            //            {
+            //                Record("尝试覆盖文件");
+            //                if (type == 1)
+            //                    FileHelper.CopyDir(fileDir + "/" + versionType, frameDir);
+            //                else
+            //                    FileHelper.CopyDir(fileDir + "/" + versionType, bodyDir);
+
+            //                Record("正在尝试修改本地版本号");
+            //                if (type == 1)
+            //                    FileHelper.SaveKeyValue(serviceConfigPath, "ClientVersion", version);
+            //                else
+            //                    FileHelper.SaveKeyValue(appsettingsConfigPath, "ClientVersion", version);
+
+            //                Record("检查更新成功 -> " + versionType);
+            //                return true;
+            //            }
+
+            //            trytimes--;
+            //            Thread.Sleep(1000);
+            //        }
+            //    }
+
+            //    return false;
+            //}
+            //finally
+            //{
+            //    isOver = true;
+            //    AddProgressBar(100);
+            //}
+        }
     }
 }
